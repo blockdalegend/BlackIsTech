@@ -1,0 +1,27 @@
+﻿@page
+@model IndexModel
+@using DemoFrontend.Models
+@{
+    ViewData["Title"] = "Home page";
+}
+
+
+<div class="text-center">
+    <h1 class="display-4">ATL Conference Demo</h1>
+    <table align="center">
+        <tr>
+            <th>Student Name</th>
+            <th>Student Grade</th>
+        </tr>
+        @foreach (Student student in this.Model.Students)
+        {
+            <tr>
+                <td>@student.StudentName</td>
+                <td>@student.StudentGrade</td>
+            </tr>
+        }
+    </table>
+    @{
+
+    }
+</div>
