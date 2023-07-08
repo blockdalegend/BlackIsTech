@@ -7,18 +7,18 @@ targetScope = 'subscription'
 @minLength(1)
 @maxLength(64)
 @description('Name of the the environment which is used to generate a short unique hash used in all resources.')
-param environmentName string
+param environmentName string = 'blackistechconference'
 
 @minLength(1)
 @description('Primary location for all resources')
-param location string
+param location string = 'eastus'
 
 // Optional parameters to override the default azd resource naming conventions.
 // Add the following to main.parameters.json to provide values:
 // "resourceGroupName": {
 //      "value": "myGroupName"
 // }
-param resourceGroupName string = ''
+param resourceGroupName string = 'blackistechconferencedemo'
 
 var abbrs = loadJsonContent('./abbreviations.json')
 
@@ -39,7 +39,6 @@ var resourceToken = toLower(uniqueString(subscription().id, environmentName, loc
 // Example usage:
 //   tags: union(tags, { 'azd-service-name': apiServiceName })
 #disable-next-line no-unused-vars
-var apiServiceName = 'python-api'
 
 // Organize resources in a resource group
 resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
@@ -48,19 +47,61 @@ resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   tags: tags
 }
 
-// Add resources to be provisioned below.
-// A full example that leverages azd bicep modules can be seen in the todo-python-mongo template:
-// https://github.com/Azure-Samples/todo-python-mongo/tree/main/infra
+module managedIdentity 'managedidentity.bicep' = {
+  name: 'managedIdentity'
+  scope: rg
+  params: {
+    name: 'blackistechid'
+  }
+}
 
+module virtualnetwork 'virtualnetwork.bicep' = {
+  name: 'virtualnetwork'
+  scope: rg
+  params: {
+    virtualnetworkname: 'virtualnetwork'
+  }
+}
 
+module keyvault 'keyvault.bicep' = {
+  name: 'keyvault'
+  scope: rg
+  params: {
+    keyvaultname: 'blackistechkv'
+    managedIdentityName: 'blackistechid'
+    privatednszonename: 'privatelink.vaultcore.azure.net'
+    privateendpointname: 'KVEndpointConnection'
+    privateendpointnameconnectionname: 'KVEndpoint'
+    virtualnetworkname: 'virtualnetwork'
+  }
+}
 
-// Add outputs from the deployment here, if needed.
-//
-// This allows the outputs to be referenced by other bicep deployments in the deployment pipeline,
-// or by the local machine as a way to reference created resources in Azure for local development.
-// Secrets should not be added here.
-//
-// Outputs are automatically saved in the local azd environment .env file.
-// To see these outputs, run `azd env get-values`,  or `azd env get-values --output json` for json output.
-output AZURE_LOCATION string = location
-output AZURE_TENANT_ID string = tenant().tenantId
+module sqldatabase 'sqldatabase.bicep' = {
+  name: 'sqldatabase'
+  scope: rg
+  params: {
+    sqlservername: 'blackistechdemosql'
+    sqldbname: 'blackistechdb'
+    sqlendpointname: 'sqlendpoint'
+    keyvaultname: 'blackistechkv'
+    privatelinkdnszonesname: 'privatelink.database.windows.net'
+    virtualnetworkname: 'virtualnetwork'
+    managedidentityname: 'blackistechid'
+  }
+  dependsOn: [
+    keyvault
+  ]
+}
+
+module containerinstance 'containerinstance.bicep' = {
+  name: 'containerinstance'
+  scope: rg
+  params: {
+    sitename: 'blackistechdemosite'
+    serverfarmname: 'blackistechfarm'
+    virtualnetworkname: 'virtualnetwork'
+    dockerimagename: 'chall88/demofrontend:latest'
+    managedIdentityName: 'blackistechid'
+    keyvaultname: 'blackistechkv'
+  }
+}
