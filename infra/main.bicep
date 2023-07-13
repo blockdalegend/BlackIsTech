@@ -7,7 +7,7 @@ targetScope = 'subscription'
 @minLength(1)
 @maxLength(64)
 @description('Name of the the environment which is used to generate a short unique hash used in all resources.')
-param environmentName string = 'blackistechconference'
+param environmentName string = 'dev'
 
 @minLength(1)
 @description('Primary location for all resources')
@@ -19,6 +19,7 @@ param location string = 'eastus'
 //      "value": "myGroupName"
 // }
 param resourceGroupName string = 'blackistechconferencedemo'
+param uniqueKeyvaultName string = '${environmentName}-${location}'
 
 var abbrs = loadJsonContent('./abbreviations.json')
 
@@ -42,7 +43,7 @@ var resourceToken = toLower(uniqueString(subscription().id, environmentName, loc
 
 // Organize resources in a resource group
 resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
-  name: !empty(resourceGroupName) ? resourceGroupName : '${abbrs.resourcesResourceGroups}${environmentName}'
+  name: !empty(resourceGroupName) ? '${resourceGroupName}-${environmentName}-${location}' : '${abbrs.resourcesResourceGroups}${environmentName}'
   location: location
   tags: tags
 }
@@ -67,13 +68,16 @@ module keyvault 'keyvault.bicep' = {
   name: 'keyvault'
   scope: rg
   params: {
-    keyvaultname: 'blackistechkv'
+    keyvaultname: uniqueKeyvaultName
     managedIdentityName: 'blackistechid'
     privatednszonename: 'privatelink.vaultcore.azure.net'
     privateendpointname: 'KVEndpointConnection'
     privateendpointnameconnectionname: 'KVEndpoint'
     virtualnetworkname: 'virtualnetwork'
   }
+  dependsOn: [
+    managedIdentity
+  ]
 }
 
 module sqldatabase 'sqldatabase.bicep' = {
@@ -83,13 +87,14 @@ module sqldatabase 'sqldatabase.bicep' = {
     sqlservername: 'blackistechdemosql'
     sqldbname: 'blackistechdb'
     sqlendpointname: 'sqlendpoint'
-    keyvaultname: 'blackistechkv'
+    keyvaultname: uniqueKeyvaultName
     privatelinkdnszonesname: 'privatelink.database.windows.net'
     virtualnetworkname: 'virtualnetwork'
     managedidentityname: 'blackistechid'
   }
   dependsOn: [
     keyvault
+    managedIdentity
   ]
 }
 
@@ -100,8 +105,12 @@ module containerinstance 'containerinstance.bicep' = {
     sitename: 'blackistechdemosite'
     serverfarmname: 'blackistechfarm'
     virtualnetworkname: 'virtualnetwork'
-    dockerimagename: 'chall88/demofrontend:latest'
+    dockerimagename: 'chall88/blackistech:latest'
     managedIdentityName: 'blackistechid'
-    keyvaultname: 'blackistechkv'
+    keyvaultname: uniqueKeyvaultName
   }
+  dependsOn: [
+    managedIdentity
+    sqldatabase
+  ]
 }
