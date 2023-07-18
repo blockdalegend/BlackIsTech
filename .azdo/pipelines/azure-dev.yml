@@ -25,7 +25,7 @@ steps:
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
-        azd provision --no-prompt
+        azd provision --no-prompt --parameters infra/main.parameters.bicepparam
     env:
       AZURE_SUBSCRIPTION_ID: $(AZURE_SUBSCRIPTION_ID)
       AZURE_ENV_NAME: $(AZURE_ENV_NAME)
