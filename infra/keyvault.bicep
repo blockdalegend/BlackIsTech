@@ -4,10 +4,10 @@ param privatednszonename string
 param virtualnetworkname string
 param managedIdentityName string
 param privateendpointnameconnectionname string
-
+param location string = resourceGroup().location
 resource keyvaultname_resource 'Microsoft.KeyVault/vaults@2022-11-01' = {
   name: keyvaultname
-  location: resourceGroup().location
+  location: location
   properties: {
     sku: {
       family: 'A'

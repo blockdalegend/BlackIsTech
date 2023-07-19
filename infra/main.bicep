@@ -7,8 +7,7 @@ param environmentName string = 'dev'
 
 @minLength(1)
 @description('Primary location for all resources')
-param location string = 'eastus'
-param uniqueKeyvaultName string = '${environmentName}-${location}'
+param location string
 param resourceGroupName string
 param managedIdentityName string
 param virtualNetworkName string
@@ -76,7 +75,7 @@ module sqldatabase 'sqldatabase.bicep' = {
     sqlservername: sqlServerName
     sqldbname: sqlDbName
     sqlendpointname: 'sqlendpoint'
-    keyvaultname: uniqueKeyvaultName
+    keyvaultname: keyVaultName
     privatelinkdnszonesname: 'privatelink.database.windows.net'
     virtualnetworkname: virtualNetworkName
     managedidentityname: managedIdentityName
@@ -96,7 +95,7 @@ module containerinstance 'containerinstance.bicep' = {
     virtualnetworkname: virtualNetworkName
     dockerimagename: containerImageName
     managedIdentityName: managedIdentityName
-    keyvaultname: uniqueKeyvaultName
+    keyvaultname: keyVaultName
   }
   dependsOn: [
     managedIdentity
