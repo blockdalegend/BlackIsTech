@@ -3,7 +3,8 @@
 # This is an example starter azure.yaml file containing several example services in comments below.
 # Make changes as needed to describe your application setup.
 # To learn more about the azure.yaml file, visit https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/azd-schema
-
+pipeline:
+  provider: azdo
 # Name of the application.
 name: azd-starter
 # services:
