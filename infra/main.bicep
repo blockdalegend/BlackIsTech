@@ -56,7 +56,8 @@ module keyvault 'keyvault.bicep' = {
   name: 'keyvault'
   scope: rg
   params: {
-    keyvaultname: keyVaultName
+    keyvaultname: '${keyVaultName}-${location}'
+    location: location
     managedIdentityName: managedIdentityName
     privatednszonename: 'privatelink.vaultcore.azure.net'
     privateendpointname: 'KVEndpointConnection'
@@ -72,10 +73,10 @@ module sqldatabase 'sqldatabase.bicep' = {
   name: 'sqldatabase'
   scope: rg
   params: {
-    sqlservername: sqlServerName
+    sqlservername: '${sqlServerName}-${location}'
     sqldbname: sqlDbName
     sqlendpointname: 'sqlendpoint'
-    keyvaultname: keyVaultName
+    keyvaultname: '${keyVaultName}-${location}'
     privatelinkdnszonesname: 'privatelink.database.windows.net'
     virtualnetworkname: virtualNetworkName
     managedidentityname: managedIdentityName
@@ -90,12 +91,12 @@ module containerinstance 'containerinstance.bicep' = {
   name: 'containerinstance'
   scope: rg
   params: {
-    sitename: serverSiteName
+    sitename: '${serverSiteName}-${location}'
     serverfarmname: serverFarmName
     virtualnetworkname: virtualNetworkName
     dockerimagename: containerImageName
     managedIdentityName: managedIdentityName
-    keyvaultname: keyVaultName
+    keyvaultname: '${keyVaultName}-${location}'
   }
   dependsOn: [
     managedIdentity

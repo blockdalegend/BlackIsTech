@@ -27,7 +27,7 @@
       "value": "blackIsTechKv"
     },
     "containerImageName": {
-      "value": "chall88/blackistech:latest"
+      "value": "chall88/demofrontend:latest"
     },
     "serverFarmName": {
       "value": "blackistechfarm"
