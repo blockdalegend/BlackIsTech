@@ -1,11 +1,6 @@
 targetScope = 'subscription'
 
 @minLength(1)
-@maxLength(64)
-@description('Name of the the environment which is used to generate a short unique hash used in all resources.')
-param environmentName string = 'dev'
-
-@minLength(1)
 @description('Primary location for all resources')
 param location string
 param resourceGroupName string
@@ -17,6 +12,7 @@ param keyVaultName string
 param containerImageName string
 param serverFarmName string
 param serverSiteName string
+param environmentName string
 
 var abbrs = loadJsonContent('./abbreviations.json')
 
@@ -31,7 +27,7 @@ var resourceToken = toLower(uniqueString(subscription().id, environmentName, loc
 #disable-next-line no-unused-vars
 
 resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
-  name: '${resourceGroupName}-${location}'
+  name: '${resourceGroupName}-${environmentName}'
   location: location
   tags: tags
 }
@@ -56,7 +52,7 @@ module keyvault 'keyvault.bicep' = {
   name: 'keyvault'
   scope: rg
   params: {
-    keyvaultname: '${keyVaultName}-${location}'
+    keyvaultname: '${keyVaultName}-${environmentName}'
     location: location
     managedIdentityName: managedIdentityName
     privatednszonename: 'privatelink.vaultcore.azure.net'
@@ -73,10 +69,10 @@ module sqldatabase 'sqldatabase.bicep' = {
   name: 'sqldatabase'
   scope: rg
   params: {
-    sqlservername: '${sqlServerName}-${location}'
+    sqlservername: '${sqlServerName}-${environmentName}'
     sqldbname: sqlDbName
     sqlendpointname: 'sqlendpoint'
-    keyvaultname: '${keyVaultName}-${location}'
+    keyvaultname: '${keyVaultName}-${environmentName}'
     privatelinkdnszonesname: 'privatelink.database.windows.net'
     virtualnetworkname: virtualNetworkName
     managedidentityname: managedIdentityName
@@ -91,12 +87,12 @@ module containerinstance 'containerinstance.bicep' = {
   name: 'containerinstance'
   scope: rg
   params: {
-    sitename: '${serverSiteName}-${location}'
+    sitename: '${serverSiteName}-${environmentName}'
     serverfarmname: serverFarmName
     virtualnetworkname: virtualNetworkName
     dockerimagename: containerImageName
     managedIdentityName: managedIdentityName
-    keyvaultname: '${keyVaultName}-${location}'
+    keyvaultname: '${keyVaultName}-${environmentName}'
   }
   dependsOn: [
     managedIdentity
