@@ -103,3 +103,5 @@ module containerinstance 'containerinstance.bicep' = {
     sqldatabase
   ]
 }
+
+output keyvaultname string = kvname
