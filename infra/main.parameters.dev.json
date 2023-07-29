@@ -34,6 +34,9 @@
     },
     "serverSiteName": {
       "value": "blackistechdemosite"
-    }
+    },
+    "serviceconnectionserviceprincipalid":{
+      "value": "72634cb6-bcfc-4e69-98f9-ecac494ed1d8"
+    } 
   }
 }

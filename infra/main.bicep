@@ -13,6 +13,7 @@ param containerImageName string
 param serverFarmName string
 param serverSiteName string
 param environmentName string
+param serviceconnectionserviceprincipalid string
 
 var abbrs = loadJsonContent('./abbreviations.json')
 
@@ -61,6 +62,7 @@ module keyvault 'keyvault.bicep' = {
     privateendpointname: 'KVEndpointConnection'
     privateendpointnameconnectionname: 'KVEndpoint'
     virtualnetworkname: virtualNetworkName
+    serviceconnectionobjectId: serviceconnectionserviceprincipalid
   }
   dependsOn: [
     managedIdentity

@@ -4,6 +4,7 @@ param privatednszonename string
 param virtualnetworkname string
 param managedIdentityName string
 param privateendpointnameconnectionname string
+param serviceconnectionobjectId string
 param location string = resourceGroup().location
 resource keyvaultname_resource 'Microsoft.KeyVault/vaults@2022-11-01' = {
   name: keyvaultname
@@ -21,6 +22,21 @@ resource keyvaultname_resource 'Microsoft.KeyVault/vaults@2022-11-01' = {
       virtualNetworkRules: []
     }
     accessPolicies: [
+      {
+        tenantId: subscription().tenantId
+        objectId: serviceconnectionobjectId
+        permissions: {
+          keys: []
+          secrets: [
+            'get'
+            'list'
+          ]
+          certificates: [
+            'get'
+            'list'
+          ]
+        }
+      },
       {
         tenantId: subscription().tenantId
         objectId: reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', managedIdentityName), '2018-11-30', 'Full').properties.principalId

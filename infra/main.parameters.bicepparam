@@ -11,3 +11,4 @@ param keyVaultName = 'blackIsTechKv'
 param containerImageName = 'chall88/blackistech:latest'
 param serverFarmName = 'blackistechfarm'
 param serverSiteName = 'blackistechdemosite'
+param serviceconnectionserviceprincipalid = '72634cb6-bcfc-4e69-98f9-ecac494ed1d8' //service connection app reg id
