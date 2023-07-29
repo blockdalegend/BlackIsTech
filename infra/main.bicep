@@ -22,6 +22,8 @@ var tags = {
   'azd-env-name': environmentName
 }
 
+var kvname = '${keyVaultName}-${environmentName}'
+
 #disable-next-line no-unused-vars
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
 #disable-next-line no-unused-vars
@@ -52,7 +54,7 @@ module keyvault 'keyvault.bicep' = {
   name: 'keyvault'
   scope: rg
   params: {
-    keyvaultname: '${keyVaultName}-${environmentName}'
+    keyvaultname: kvname
     location: location
     managedIdentityName: managedIdentityName
     privatednszonename: 'privatelink.vaultcore.azure.net'
@@ -72,7 +74,7 @@ module sqldatabase 'sqldatabase.bicep' = {
     sqlservername: '${sqlServerName}-${environmentName}'
     sqldbname: sqlDbName
     sqlendpointname: 'sqlendpoint'
-    keyvaultname: '${keyVaultName}-${environmentName}'
+    keyvaultname: kvname
     privatelinkdnszonesname: 'privatelink.database.windows.net'
     virtualnetworkname: virtualNetworkName
     managedidentityname: managedIdentityName
@@ -92,7 +94,7 @@ module containerinstance 'containerinstance.bicep' = {
     virtualnetworkname: virtualNetworkName
     dockerimagename: containerImageName
     managedIdentityName: managedIdentityName
-    keyvaultname: '${keyVaultName}-${environmentName}'
+    keyvaultname: kvname
   }
   dependsOn: [
     managedIdentity
