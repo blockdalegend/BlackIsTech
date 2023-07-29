@@ -36,8 +36,7 @@ resource keyvaultname_resource 'Microsoft.KeyVault/vaults@2022-11-01' = {
             'list'
           ]
         }
-      },
-      {
+      },{
         tenantId: subscription().tenantId
         objectId: reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', managedIdentityName), '2018-11-30', 'Full').properties.principalId
         permissions: {
