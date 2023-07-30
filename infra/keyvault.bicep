@@ -172,3 +172,5 @@ resource privateendpointname_resource 'Microsoft.Network/privateEndpoints@2022-0
     ]
   }
 }
+
+output keyvaultname string = keyvaultname_resource.name

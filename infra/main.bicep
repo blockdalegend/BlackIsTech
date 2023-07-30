@@ -104,5 +104,5 @@ module containerinstance 'containerinstance.bicep' = {
   ]
 }
 
-output keyvaultname string = kvname
-output sql string = '${sqlServerName}-${environmentName}'
+output keyvaultname string = keyvault.outputs.keyvaultname
+output sql string = sqldatabase.outputs.sqlserverfqdn

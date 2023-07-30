@@ -215,3 +215,5 @@ resource KeyVaultName_SQLDBPassword 'Microsoft.KeyVault/vaults/secrets@2022-11-0
     sqlservername_sqldbname
   ]
 }
+
+output sqlserverfqdn string = sqlservername_resource.properties.fullyQualifiedDomainName
