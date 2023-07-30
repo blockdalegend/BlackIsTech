@@ -105,3 +105,4 @@ module containerinstance 'containerinstance.bicep' = {
 }
 
 output keyvaultname string = kvname
+output sql string = '${sqlServerName}-${environmentName}'
