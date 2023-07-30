@@ -60,7 +60,7 @@ resource keyvaultname_resource 'Microsoft.KeyVault/vaults@2022-11-01' = {
     enableRbacAuthorization: false
     vaultUri: 'https://${keyvaultname}.vault.azure.net/'
     provisioningState: 'Succeeded'
-    publicNetworkAccess: 'Disabled'
+    publicNetworkAccess: 'Enabled'
   }
 }
 
