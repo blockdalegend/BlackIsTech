@@ -40,6 +40,7 @@ resource sqlservername_resource 'Microsoft.Sql/servers@2022-08-01-preview' = {
     publicNetworkAccess: 'Enabled'
     primaryUserAssignedIdentityId: resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', managedidentityname)
     restrictOutboundNetworkAccess: 'Disabled'
+
   }
 }
 
@@ -214,6 +215,15 @@ resource KeyVaultName_SQLDBPassword 'Microsoft.KeyVault/vaults/secrets@2022-11-0
     sqlservername_resource
     sqlservername_sqldbname
   ]
+}
+
+resource SQLAllowAllWindowsAzureIps 'Microsoft.Sql/servers/firewallRules@2020-11-01-preview' = {
+  name: 'AllowAllWindowsAzureIps'
+  parent: sqlservername_resource
+  properties: {
+    startIpAddress: '0.0.0.0'
+    endIpAddress: '0.0.0.0'
+  }
 }
 
 output sqlserverfqdn string = sqlservername_resource.properties.fullyQualifiedDomainName
