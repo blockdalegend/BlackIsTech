@@ -1,0 +1,42 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "environmentName": {
+      "value": "qa-0"
+    },
+    "location": {
+      "value": "eastus"
+    },
+    "resourceGroupName": {
+      "value": "blackistechconferencedemo"
+    },
+    "managedIdentityName": {
+      "value": "blackistechid"
+    },
+    "virtualNetworkName": {
+      "value": "virtualnetwork"
+    },
+    "sqlServerName": {
+      "value": "blackistechdemosql"
+    },
+    "sqlDbName": {
+      "value": "blackistechdb"
+    },
+    "keyVaultName": {
+      "value": "blackIsTechKv"
+    },
+    "containerImageName": {
+      "value": "chall88/demofrontend:latest"
+    },
+    "serverFarmName": {
+      "value": "blackistechfarm"
+    },
+    "serverSiteName": {
+      "value": "blackistechdemosite"
+    },
+    "serviceconnectionserviceprincipalid":{
+      "value": "b723be68-b15c-42c5-b236-75147d940e82"
+    } 
+  }
+}
