@@ -1,4 +1,4 @@
-#Azure Repeatable infrastructure demo
+Azure Repeatable infrastructure demo
 
 What it is
 This is a demo showing one of the many paths to create infrastructure in well structured, repeatable manner. This project is built using Azure Bicep which is a DSL that is the sucessor of ARM (Azure Resource Manager) templates. https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/overview?tabs=bicep
